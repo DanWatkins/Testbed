@@ -8,6 +8,8 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
-HEADERS += Message.h
-SOURCES += main.cpp
+HEADERS += \
+    TextEditor.h
+SOURCES += \
+    Main.cpp
 RESOURCES += qml.qrc

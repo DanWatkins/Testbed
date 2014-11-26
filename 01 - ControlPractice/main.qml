@@ -1,71 +1,41 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
+import QtQuick.Window 2.0
+import com.test.text 1.0
 
 ApplicationWindow {
+    id: root
     visible: true
     width: 640
     height: 480
     title: qsTr("Hello World")
 
-    minimumWidth: toolBar.implicitWidth
+    TextEditor {
+        id: textEditor
+    }
 
-    toolBar:ToolBar {
-        RowLayout {
-            width: parent.width
-            ToolButton {
-                iconSource: "circle_green.bmp"
+    menuBar: MenuBar {
+        Menu {
+            title: "File"
+            MenuItem { text: "New" }
+            MenuItem { text: "Open" }
+            MenuItem
+            {
+                text: "Save"
+                onTriggered:
+                {
+                    var component = Qt.createComponent("SaveFileDialog.qml");
+                    var dialog = component.createObject(root);
+
+                    textEditor.saveText("blah");
+                }
             }
-            ToolButton {
-                iconSource: "circle_red.bmp"
-            }
-            Slider {
-                Layout.fillWidth: true
-                Layout.minimumWidth: 180
-            }
+            MenuItem { text: "Exit" }
         }
     }
 
-    SplitView {
+    TextArea {
         anchors.fill: parent
-        orientation: Qt.Vertical
-
-        SplitView {
-            orientation: Qt.Horizontal
-            TableView {
-                TableViewColumn {
-                    title: "Data Values"
-                }
-
-                model: 1000
-            }
-            TableView {
-                TableViewColumn {
-                    title: "Values"
-                    role: "author"
-                }
-
-                model: dataModel
-            }
-        }
-
-        TableView {
-            TableViewColumn {
-                title: "Stuff"
-            }
-
-            model: 10
-        }
     }
-/*
-    TableView {
-        anchors.fill: parent
-
-        TableViewColumn {
-            title: "Values"
-            role: "author"
-        }
-
-        model: dataModel
-    }*/
 }
