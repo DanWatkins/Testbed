@@ -13,6 +13,4 @@ Item {
             running: true
         }
     }
-
-
 }
