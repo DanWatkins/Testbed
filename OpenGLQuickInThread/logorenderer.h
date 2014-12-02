@@ -44,11 +44,12 @@
 #include <QtGui/qvector3d.h>
 #include <QtGui/qmatrix4x4.h>
 #include <QtGui/qopenglshaderprogram.h>
+#include <QtGui/QOpenGLFunctions_4_2_Core>
 
 #include <QTime>
 #include <QVector>
 
-class LogoRenderer
+class LogoRenderer : protected QOpenGLFunctions_4_2_Core
 {
 public:
     LogoRenderer();

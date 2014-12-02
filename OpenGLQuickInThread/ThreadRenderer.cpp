@@ -42,15 +42,31 @@
 #include "RenderThread.h"
 #include "TextureNode.h"
 
-QList<QThread *> ThreadRenderer::threads;
+QList<RenderThread *> ThreadRenderer::threads;
 
-
-ThreadRenderer::ThreadRenderer()
-    : m_renderThread(0)
+ThreadRenderer::ThreadRenderer() :
+	m_renderThread(0)
 {
     setFlag(ItemHasContents, true);
     m_renderThread = new RenderThread(QSize(512, 512));
 }
+
+
+void ThreadRenderer::endAllRenderThreads()
+{
+	foreach (RenderThread *t, ThreadRenderer::threads)
+	{
+		t->wait();
+		delete t;
+	}
+}
+
+
+void ThreadRenderer::enqueue(RenderThread *thread)
+{
+	threads << thread;
+}
+
 
 void ThreadRenderer::ready()
 {
@@ -71,7 +87,8 @@ QSGNode *ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
 {
     TextureNode *node = static_cast<TextureNode *>(oldNode);
 
-    if (!m_renderThread->context) {
+	if (!m_renderThread->context)
+	{
         QOpenGLContext *current = window()->openglContext();
         // Some GL implementations requres that the currently bound context is
         // made non-current before we set up sharing, so we doneCurrent here
@@ -90,7 +107,8 @@ QSGNode *ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
         return 0;
     }
 
-    if (!node) {
+	if (!node)
+	{
         node = new TextureNode(window());
 
         /* Set up connections to get the production of FBO textures in sync with vsync on the

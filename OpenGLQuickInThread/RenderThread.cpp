@@ -1,15 +1,15 @@
 #include "RenderThread.h"
 #include "ThreadRenderer.h"
 
-RenderThread::RenderThread(const QSize &size)
-	: surface(0)
-	, context(0)
-	, m_renderFbo(0)
-	, m_displayFbo(0)
-	, m_logoRenderer(0)
-	, m_size(size)
+RenderThread::RenderThread(const QSize &size) :
+	surface(0),
+	context(0),
+	m_renderFbo(0),
+	m_displayFbo(0),
+	m_logoRenderer(0),
+	m_size(size)
 {
-	ThreadRenderer::threads << this;
+	ThreadRenderer::enqueue(this);
 }
 
 
@@ -17,7 +17,8 @@ void RenderThread::renderNext()
 {
 	context->makeCurrent(surface);
 
-	if (!m_renderFbo) {
+	if (!m_renderFbo)
+	{
 		// Initialize the buffers and renderer
 		QOpenGLFramebufferObjectFormat format;
 		format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);

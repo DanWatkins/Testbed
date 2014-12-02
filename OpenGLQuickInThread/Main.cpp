@@ -66,6 +66,12 @@ int main(int argc, char **argv)
     {
         QQuickView view;
 
+		QSurfaceFormat format;
+		format.setMajorVersion(4);
+		format.setMinorVersion(2);
+		format.setProfile(QSurfaceFormat::CompatibilityProfile);
+		view.setFormat(format);
+
         // Rendering in a thread introduces a slightly more complicated cleanup
         // so we ensure that no cleanup of graphics resources happen until the
         // application is shutting down.
@@ -79,13 +85,10 @@ int main(int argc, char **argv)
         execReturn = app.exec();
     }
 
-    // As the render threads make use of our QGuiApplication object
-    // to clean up gracefully, wait for them to finish before
-    // QGuiApp is taken off the heap.
-    foreach (QThread *t, ThreadRenderer::threads) {
-        t->wait();
-        delete t;
-    }
+	// As the render threads make use of our QGuiApplication object
+	// to clean up gracefully, wait for them to finish before
+	// QGuiApp is taken off the heap.
+	ThreadRenderer::endAllRenderThreads();
 
     return execReturn;
 }

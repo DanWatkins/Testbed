@@ -66,6 +66,7 @@ void LogoRenderer::paintQtLogo()
 
 void LogoRenderer::initialize()
 {
+	initializeOpenGLFunctions();
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 
     QOpenGLShader *vshader1 = new QOpenGLShader(QOpenGLShader::Vertex, &program1);

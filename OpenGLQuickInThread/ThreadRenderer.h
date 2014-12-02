@@ -52,7 +52,8 @@ class ThreadRenderer : public QQuickItem
 public:
     ThreadRenderer();
 
-    static QList<QThread *> threads;
+	static void endAllRenderThreads();
+	static void enqueue(RenderThread *thread);
 
 public Q_SLOTS:
     void ready();
@@ -62,6 +63,7 @@ protected:
 
 private:
     RenderThread *m_renderThread;
+	static QList<RenderThread*> threads;
 };
 
 #endif
