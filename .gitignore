@@ -31,3 +31,4 @@ Makefile.Debug
 Makefile.Release
 *.Debug
 *.user
+OpenGLQuickInThread/release/
