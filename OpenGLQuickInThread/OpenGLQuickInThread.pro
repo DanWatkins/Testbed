@@ -2,6 +2,7 @@ QT += quick
 
 # To make threaded gl check...
 QT += core-private gui-private
+CONFIG += c++11
 
 RESOURCES += textureinthread.qrc
 
@@ -14,13 +15,13 @@ OTHER_FILES += \
 
 HEADERS += \
     logorenderer.h \
-    ThreadRenderer.h \
     RenderThread.h \
-    TextureNode.h
+    TextureNode.h \
+    OpenGLQuickItem.h
 
 SOURCES += \
     logorenderer.cpp \
-    ThreadRenderer.cpp \
     Main.cpp \
     RenderThread.cpp \
-    TextureNode.cpp
+    TextureNode.cpp \
+    OpenGLQuickItem.cpp

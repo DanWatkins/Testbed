@@ -47,7 +47,7 @@
 
 #include <QtQuick/QQuickView>
 
-#include "threadrenderer.h"
+#include "OpenGLQuickItem.h"
 
 int main(int argc, char **argv)
 {
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
         return app.exec();
     }
 
-    qmlRegisterType<ThreadRenderer>("SceneGraphRendering", 1, 0, "Renderer");
+	qmlRegisterType<OpenGLQuickItem>("SceneGraphRendering", 1, 0, "OpenGLQuickItem");
     int execReturn = 0;
 
     {
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 	// As the render threads make use of our QGuiApplication object
 	// to clean up gracefully, wait for them to finish before
 	// QGuiApp is taken off the heap.
-	ThreadRenderer::endAllRenderThreads();
+	OpenGLQuickItem::endAllRenderThreads();
 
     return execReturn;
 }

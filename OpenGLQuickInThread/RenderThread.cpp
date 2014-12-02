@@ -1,62 +1,80 @@
 #include "RenderThread.h"
-#include "ThreadRenderer.h"
+#include "OpenGLQuickItem.h"
 
 RenderThread::RenderThread(const QSize &size) :
-	surface(0),
-	context(0),
-	m_renderFbo(0),
-	m_displayFbo(0),
-	m_logoRenderer(0),
-	m_size(size)
+	mSurface(nullptr),
+	mContext(nullptr),
+	mRenderFbo(nullptr),
+	mDisplayFbo(nullptr),
+	mLogoRenderer(nullptr),
+	mSize(size)
 {
-	ThreadRenderer::enqueue(this);
+	OpenGLQuickItem::enqueue(this);
+}
+
+
+void RenderThread::ready()
+{
+	mSurface = new QOffscreenSurface();
+	mSurface->setFormat(mContext->format());
+	mSurface->create();
+}
+
+
+void RenderThread::createContext(QOpenGLContext *sharedContext)
+{
+	mContext = new QOpenGLContext();
+	mContext->setFormat(sharedContext->format());
+	mContext->setShareContext(sharedContext);
+	mContext->create();
+	mContext->moveToThread(this);
 }
 
 
 void RenderThread::renderNext()
 {
-	context->makeCurrent(surface);
+	mContext->makeCurrent(mSurface);
 
-	if (!m_renderFbo)
+	if (!mRenderFbo)
 	{
 		// Initialize the buffers and renderer
 		QOpenGLFramebufferObjectFormat format;
 		format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-		m_renderFbo = new QOpenGLFramebufferObject(m_size, format);
-		m_displayFbo = new QOpenGLFramebufferObject(m_size, format);
-		m_logoRenderer = new LogoRenderer();
-		m_logoRenderer->initialize();
+		mRenderFbo = new QOpenGLFramebufferObject(mSize, format);
+		mDisplayFbo = new QOpenGLFramebufferObject(mSize, format);
+		mLogoRenderer = new LogoRenderer();
+		mLogoRenderer->initialize();
 	}
 
-	m_renderFbo->bind();
-	glViewport(0, 0, m_size.width(), m_size.height());
+	mRenderFbo->bind();
+	glViewport(0, 0, mSize.width(), mSize.height());
 
-	m_logoRenderer->render();
+	mLogoRenderer->render();
 
 	// We need to flush the contents to the FBO before posting
 	// the texture to the other thread, otherwise, we might
 	// get unexpected results.
 	glFlush();
 
-	m_renderFbo->bindDefault();
-	qSwap(m_renderFbo, m_displayFbo);
+	mRenderFbo->bindDefault();
+	qSwap(mRenderFbo, mDisplayFbo);
 
-	emit textureReady(m_displayFbo->texture(), m_size);
+	emit textureReady(mDisplayFbo->texture(), mSize);
 }
 
 void RenderThread::shutDown()
 {
 	qDebug() << "Shutting Down";
 
-	context->makeCurrent(surface);
-	delete m_renderFbo;
-	delete m_displayFbo;
-	delete m_logoRenderer;
-	context->doneCurrent();
-	delete context;
+	mContext->makeCurrent(mSurface);
+	delete mRenderFbo;
+	delete mDisplayFbo;
+	delete mLogoRenderer;
+	mContext->doneCurrent();
+	delete mContext;
 
 	// schedule this to be deleted only after we're done cleaning up
-	surface->deleteLater();
+	mSurface->deleteLater();
 
 	// Stop event processing, move the thread to GUI and make sure it is deleted.
 	exit();

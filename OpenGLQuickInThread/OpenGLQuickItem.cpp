@@ -38,23 +38,23 @@
 **
 ****************************************************************************/
 
-#include "threadrenderer.h"
+#include "OpenGLQuickItem.h"
 #include "RenderThread.h"
 #include "TextureNode.h"
 
-QList<RenderThread *> ThreadRenderer::threads;
+QList<RenderThread *> OpenGLQuickItem::mThreads;
 
-ThreadRenderer::ThreadRenderer() :
-	m_renderThread(0)
+OpenGLQuickItem::OpenGLQuickItem() :
+	mRenderThread(0)
 {
     setFlag(ItemHasContents, true);
-    m_renderThread = new RenderThread(QSize(512, 512));
+	mRenderThread = new RenderThread(QSize(512, 512));
 }
 
 
-void ThreadRenderer::endAllRenderThreads()
+void OpenGLQuickItem::endAllRenderThreads()
 {
-	foreach (RenderThread *t, ThreadRenderer::threads)
+	foreach (RenderThread *t, OpenGLQuickItem::mThreads)
 	{
 		t->wait();
 		delete t;
@@ -62,32 +62,28 @@ void ThreadRenderer::endAllRenderThreads()
 }
 
 
-void ThreadRenderer::enqueue(RenderThread *thread)
+void OpenGLQuickItem::enqueue(RenderThread *thread)
 {
-	threads << thread;
+	mThreads << thread;
 }
 
 
-void ThreadRenderer::ready()
+void OpenGLQuickItem::ready()
 {
-    m_renderThread->surface = new QOffscreenSurface();
-    m_renderThread->surface->setFormat(m_renderThread->context->format());
-    m_renderThread->surface->create();
+	mRenderThread->ready();
+	mRenderThread->moveToThread(mRenderThread);
+	connect(window(), SIGNAL(sceneGraphInvalidated()), mRenderThread, SLOT(shutDown()), Qt::QueuedConnection);
 
-    m_renderThread->moveToThread(m_renderThread);
-
-    connect(window(), SIGNAL(sceneGraphInvalidated()), m_renderThread, SLOT(shutDown()), Qt::QueuedConnection);
-
-    m_renderThread->start();
+	mRenderThread->start();
     update();
 }
 
 
-QSGNode *ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode *OpenGLQuickItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     TextureNode *node = static_cast<TextureNode *>(oldNode);
 
-	if (!m_renderThread->context)
+	if (!mRenderThread->hasValidContext())
 	{
         QOpenGLContext *current = window()->openglContext();
         // Some GL implementations requres that the currently bound context is
@@ -95,11 +91,7 @@ QSGNode *ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
         // and makeCurrent down below while setting up our own context.
         current->doneCurrent();
 
-        m_renderThread->context = new QOpenGLContext();
-        m_renderThread->context->setFormat(current->format());
-        m_renderThread->context->setShareContext(current);
-        m_renderThread->context->create();
-        m_renderThread->context->moveToThread(m_renderThread);
+		mRenderThread->createContext(current);
 
         current->makeCurrent(window());
 
@@ -125,13 +117,13 @@ QSGNode *ThreadRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
          *
          * This FBO rendering pipeline is throttled by vsync on the scene graph rendering thread.
          */
-        connect(m_renderThread, SIGNAL(textureReady(int,QSize)), node, SLOT(newTexture(int,QSize)), Qt::DirectConnection);
+		connect(mRenderThread, SIGNAL(textureReady(int,QSize)), node, SLOT(newTexture(int,QSize)), Qt::DirectConnection);
         connect(node, SIGNAL(pendingNewTexture()), window(), SLOT(update()), Qt::QueuedConnection);
         connect(window(), SIGNAL(beforeRendering()), node, SLOT(prepareNode()), Qt::DirectConnection);
-        connect(node, SIGNAL(textureInUse()), m_renderThread, SLOT(renderNext()), Qt::QueuedConnection);
+		connect(node, SIGNAL(textureInUse()), mRenderThread, SLOT(renderNext()), Qt::QueuedConnection);
 
         // Get the production of FBO textures started..
-        QMetaObject::invokeMethod(m_renderThread, "renderNext", Qt::QueuedConnection);
+		QMetaObject::invokeMethod(mRenderThread, "renderNext", Qt::QueuedConnection);
     }
 
     node->setRect(boundingRect());

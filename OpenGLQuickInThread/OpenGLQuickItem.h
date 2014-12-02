@@ -38,19 +38,22 @@
 **
 ****************************************************************************/
 
-#ifndef THREADRENDERER_H
-#define THREADRENDERER_H
+#ifndef _OPENGL_QUICK_ITEM_H
+#define _OPENGL_QUICK_ITEM_H
 
 #include <QQuickItem>
 
 class RenderThread;
 
-class ThreadRenderer : public QQuickItem
+
+
+
+class OpenGLQuickItem : public QQuickItem
 {
     Q_OBJECT
 
 public:
-    ThreadRenderer();
+	OpenGLQuickItem();
 
 	static void endAllRenderThreads();
 	static void enqueue(RenderThread *thread);
@@ -62,8 +65,8 @@ protected:
     QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 
 private:
-    RenderThread *m_renderThread;
-	static QList<RenderThread*> threads;
+	RenderThread *mRenderThread;
+	static QList<RenderThread*> mThreads;
 };
 
 #endif

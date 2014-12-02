@@ -73,7 +73,7 @@ Item {
             "
     }
 
-    Renderer {
+    OpenGLQuickItem {
         id: renderer
         anchors.fill: parent
         anchors.margins: 10

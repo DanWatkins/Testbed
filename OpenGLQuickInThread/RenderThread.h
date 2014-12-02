@@ -24,8 +24,10 @@ class RenderThread : public QThread
 public:
 	RenderThread(const QSize &size);
 
-	QOffscreenSurface *surface;
-	QOpenGLContext *context;
+	void ready();
+	void createContext(QOpenGLContext *sharedContext);
+
+	bool hasValidContext() { return mContext != nullptr; }
 
 public slots:
 	void renderNext();
@@ -35,11 +37,15 @@ signals:
 	void textureReady(int id, const QSize &size);
 
 private:
-	QOpenGLFramebufferObject *m_renderFbo;
-	QOpenGLFramebufferObject *m_displayFbo;
+	QOffscreenSurface *mSurface;
+	QOpenGLContext *mContext;
 
-	LogoRenderer *m_logoRenderer;
-	QSize m_size;
+
+	QOpenGLFramebufferObject *mRenderFbo;
+	QOpenGLFramebufferObject *mDisplayFbo;
+
+	LogoRenderer *mLogoRenderer;
+	QSize mSize;
 };
 
 #endif
