@@ -37,7 +37,6 @@ void OpenGLQuickItem::RenderThread::renderNext()
 
 	if (!mRenderFbo)
 	{
-		// Initialize the buffers and renderer
 		QOpenGLFramebufferObjectFormat format;
 		format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 		mRenderFbo = new QOpenGLFramebufferObject(mSize, format);
@@ -49,12 +48,7 @@ void OpenGLQuickItem::RenderThread::renderNext()
 	glViewport(0, 0, mSize.width(), mSize.height());
 
 	mRenderable->render();
-
-	// We need to flush the contents to the FBO before posting
-	// the texture to the other thread, otherwise, we might
-	// get unexpected results.
 	glFlush();
-
 	mRenderFbo->bindDefault();
 	qSwap(mRenderFbo, mDisplayFbo);
 
@@ -71,10 +65,7 @@ void OpenGLQuickItem::RenderThread::shutDown()
 	mContext->doneCurrent();
 	delete mContext;
 
-	// schedule this to be deleted only after we're done cleaning up
 	mSurface->deleteLater();
-
-	// Stop event processing, move the thread to GUI and make sure it is deleted.
 	exit();
 	moveToThread(QGuiApplication::instance()->thread());
 }

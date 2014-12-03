@@ -11,11 +11,10 @@ int main(int argc, char **argv)
 {
     QGuiApplication app(argc, argv);
 
-    if (!QGuiApplicationPrivate::platform_integration->hasCapability(QPlatformIntegration::ThreadedOpenGL)) {
-        QQuickView view;
-        view.setSource(QUrl("qrc:///scenegraph/textureinthread/error.qml"));
-        view.show();
-        return app.exec();
+	if (!QGuiApplicationPrivate::platform_integration->hasCapability(QPlatformIntegration::ThreadedOpenGL))
+	{
+		qDebug() << "Error: Platform does not support threaded OpenGL";
+		return EXIT_FAILURE;
     }
 
 	qmlRegisterType<MyOpenGLQuickItem>("SceneGraphRendering", 1, 0, "OpenGLQuickItem");
