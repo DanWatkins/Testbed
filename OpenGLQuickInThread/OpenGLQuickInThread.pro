@@ -14,14 +14,14 @@ OTHER_FILES += \
     error.qml
 
 HEADERS += \
-    logorenderer.h \
-    RenderThread.h \
-    TextureNode.h \
-    OpenGLQuickItem.h
+    Src/OpenGLQuickItem.h \
+    Src/OpenGLQuickItem/RenderThread.h \
+    Src/OpenGLQuickItem/TextureNode.h \
+    Src/MyOpenGLQuickItem.h
 
 SOURCES += \
-    logorenderer.cpp \
-    Main.cpp \
-    RenderThread.cpp \
-    TextureNode.cpp \
-    OpenGLQuickItem.cpp
+    Src/OpenGLQuickItem/Main.cpp \
+    Src/OpenGLQuickItem/OpenGLQuickItem.cpp \
+    Src/OpenGLQuickItem/RenderThread.cpp \
+    Src/OpenGLQuickItem/TextureNode.cpp
+

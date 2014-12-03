@@ -10,19 +10,18 @@
 
 #include <QtGui/QGuiApplication>
 
-#include "logorenderer.h"
-
+#include "../OpenGLQuickItem.h"
 
 /*
  * The render thread shares a context with the scene graph and will
  * render into two separate FBOs, one to use for display and one
  * to use for rendering
  */
-class RenderThread : public QThread
+class OpenGLQuickItem::RenderThread : public QThread
 {
 	Q_OBJECT
 public:
-	RenderThread(const QSize &size);
+	RenderThread(const QSize &size, IOpenGLRenderable *renderable);
 
 	void ready();
 	void createContext(QOpenGLContext *sharedContext);
@@ -37,6 +36,9 @@ signals:
 	void textureReady(int id, const QSize &size);
 
 private:
+	Q_DISABLE_COPY(RenderThread)
+	RenderThread();
+
 	QOffscreenSurface *mSurface;
 	QOpenGLContext *mContext;
 
@@ -44,7 +46,7 @@ private:
 	QOpenGLFramebufferObject *mRenderFbo;
 	QOpenGLFramebufferObject *mDisplayFbo;
 
-	LogoRenderer *mLogoRenderer;
+	IOpenGLRenderable *mRenderable;
 	QSize mSize;
 };
 

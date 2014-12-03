@@ -5,7 +5,10 @@
 #include <QtQuick/QQuickWindow>
 #include <QtCore/QMutex>
 
-class TextureNode : public QObject, public QSGSimpleTextureNode
+#include "../OpenGLQuickItem.h"
+
+
+class OpenGLQuickItem::TextureNode : public QObject, public QSGSimpleTextureNode
 {
 	Q_OBJECT
 

@@ -1,19 +1,19 @@
 #include "RenderThread.h"
-#include "OpenGLQuickItem.h"
+#include "../OpenGLQuickItem.h"
 
-RenderThread::RenderThread(const QSize &size) :
+OpenGLQuickItem::RenderThread::RenderThread(const QSize &size, IOpenGLRenderable *renderable) :
 	mSurface(nullptr),
 	mContext(nullptr),
 	mRenderFbo(nullptr),
 	mDisplayFbo(nullptr),
-	mLogoRenderer(nullptr),
+	mRenderable(renderable),
 	mSize(size)
 {
 	OpenGLQuickItem::enqueue(this);
 }
 
 
-void RenderThread::ready()
+void OpenGLQuickItem::RenderThread::ready()
 {
 	mSurface = new QOffscreenSurface();
 	mSurface->setFormat(mContext->format());
@@ -21,7 +21,7 @@ void RenderThread::ready()
 }
 
 
-void RenderThread::createContext(QOpenGLContext *sharedContext)
+void OpenGLQuickItem::RenderThread::createContext(QOpenGLContext *sharedContext)
 {
 	mContext = new QOpenGLContext();
 	mContext->setFormat(sharedContext->format());
@@ -31,7 +31,7 @@ void RenderThread::createContext(QOpenGLContext *sharedContext)
 }
 
 
-void RenderThread::renderNext()
+void OpenGLQuickItem::RenderThread::renderNext()
 {
 	mContext->makeCurrent(mSurface);
 
@@ -42,14 +42,13 @@ void RenderThread::renderNext()
 		format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 		mRenderFbo = new QOpenGLFramebufferObject(mSize, format);
 		mDisplayFbo = new QOpenGLFramebufferObject(mSize, format);
-		mLogoRenderer = new LogoRenderer();
-		mLogoRenderer->initialize();
+		mRenderable->init();
 	}
 
 	mRenderFbo->bind();
 	glViewport(0, 0, mSize.width(), mSize.height());
 
-	mLogoRenderer->render();
+	mRenderable->render();
 
 	// We need to flush the contents to the FBO before posting
 	// the texture to the other thread, otherwise, we might
@@ -62,14 +61,13 @@ void RenderThread::renderNext()
 	emit textureReady(mDisplayFbo->texture(), mSize);
 }
 
-void RenderThread::shutDown()
+void OpenGLQuickItem::RenderThread::shutDown()
 {
 	qDebug() << "Shutting Down";
 
 	mContext->makeCurrent(mSurface);
 	delete mRenderFbo;
 	delete mDisplayFbo;
-	delete mLogoRenderer;
 	mContext->doneCurrent();
 	delete mContext;
 

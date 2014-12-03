@@ -1,6 +1,6 @@
 #include "TextureNode.h"
 
-TextureNode::TextureNode(QQuickWindow *window) :
+OpenGLQuickItem::TextureNode::TextureNode(QQuickWindow *window) :
 	m_id(0),
 	m_size(0, 0),
 	m_texture(0),
@@ -13,13 +13,13 @@ TextureNode::TextureNode(QQuickWindow *window) :
 }
 
 
-TextureNode::~TextureNode()
+OpenGLQuickItem::TextureNode::~TextureNode()
 {
 	delete m_texture;
 }
 
 
-void TextureNode::newTexture(int id, const QSize &size)
+void OpenGLQuickItem::TextureNode::newTexture(int id, const QSize &size)
 {
 	m_mutex.lock();
 	m_id = id;
@@ -33,7 +33,7 @@ void TextureNode::newTexture(int id, const QSize &size)
 
 
 // Before the scene graph starts to render, we update to the pending texture
-void TextureNode::prepareNode()
+void OpenGLQuickItem::TextureNode::prepareNode()
 {
 	m_mutex.lock();
 	int newId = m_id;
