@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>main.qml</file>
-        <file>circle_green.bmp</file>
-        <file>circle_red.bmp</file>
-        <file>SaveFileDialog.qml</file>
-    </qresource>
-</RCC>

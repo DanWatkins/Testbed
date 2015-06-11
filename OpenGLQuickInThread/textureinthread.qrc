@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/scenegraph/textureinthread">
-        <file>main.qml</file>
-    </qresource>
-</RCC>
