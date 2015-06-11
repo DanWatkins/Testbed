@@ -14,9 +14,7 @@ public:
         {
             T *old = mData;
             mData = new T[mCount+1];
-
             std::memcpy(mData, old, mCount*sizeof(T));
-
             delete [] old;
         }
         else
@@ -24,22 +22,32 @@ public:
 
         mData[mCount] = element;
         mCount++;
+        mCapacity++;
     }
 
 
-    int count() const
+    void remove(int index)
     {
-        return mCount;
+        for (int i=index; i < mCount+1; i++)
+        {
+            mData[i] = mData[i+1];
+        }
+
+        mCount--;
     }
 
 
-    const T& operator[](int index) const
-    {
-        return mData[index];
-    }
+    int count() const { return mCount; }
+
+
+    int capacity() const { return mCapacity; }
+
+
+    const T& operator[](int index) const { return mData[index]; }
 
 private:
     int mCount = 0;
+    int mCapacity = 0;
     T *mData = nullptr;
 };
 
