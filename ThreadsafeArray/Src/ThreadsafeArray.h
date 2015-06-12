@@ -4,6 +4,10 @@
 #include <QtCore/QMutex>
 #include <cstring>
 
+/**
+ * I declare this impossible for now. How can we reasonably support operator[] and remove(int)
+ * without allowing users to blow their whole foot off easily?
+ */
 template<typename T>
 class ThreadsafeArray
 {
