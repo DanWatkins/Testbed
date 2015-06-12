@@ -6,60 +6,49 @@ import QtQuick.Layouts 1.1
 
 ApplicationWindow {
     id: rootWindow
-    width: 640
-    height: 480
+    width: 800
+    height: 600
     visible: true
+
+    minimumWidth: splitView.Layout.minimumWidth
+    minimumHeight: splitView.Layout.minimumHeight
 
     menuBar: MainMenuBar { }
 
-    GroupBox {
-        id: groupBox_deletionRules
-        anchors.margins: 5
+    SplitView {
+        id: splitView
         anchors.fill: parent
-        title: qsTr("Deletion Rules")
+        Layout.minimumWidth: 600
+        Layout.minimumHeight: 400
 
-        DeletionRulesTableView { }
+        Item {
+            Layout.minimumWidth: 300
+            Layout.minimumHeight: 300
 
-        Button {
-            id: button_new
-            y: 252
-            text: qsTr("New")
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
+            GroupBox {
+                id: groupBox_deletionRules
+                width: 400
+                anchors.fill: parent
+                anchors.margins: 5
+                title: qsTr("Deletion Rules")
+
+                DeletionRulesTableView { }
+            }
         }
 
-        Button {
-            id: button_delete
-            y: 251
-            text: qsTr("Delete")
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.left: button_new.right
-            anchors.leftMargin: 5
-        }
+        Item {
+            Layout.minimumWidth: 200
+            Layout.minimumHeight: 300
 
-        Button {
-            id: button_start
-            x: 458
-            y: 252
-            text: qsTr("Start")
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.right: button_forceRun.left
-            anchors.rightMargin: 5
-        }
+            GroupBox {
+                id: groupBox_conditions
+                width: 300
+                anchors.fill: parent
+                anchors.margins: 5
+                title: qsTr("Conditions")
 
-        Button {
-            id: button_forceRun
-            x: 539
-            y: 252
-            text: qsTr("Force Run")
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
+                RuleConditionsTableView { }
+            }
         }
     }
 }
