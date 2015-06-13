@@ -9,7 +9,16 @@ Item {
 
     GroupBox {
         id: groupBox_conditions
-        anchors.fill: parent
+        width: 300
+        Layout.minimumWidth: 300
+        Layout.minimumHeight: 200
+
+        anchors.leftMargin: 5
+        anchors.bottomMargin: 5
+        anchors.topMargin: 5
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.top: parent.top
 
         title: qsTr("Conditions")
 
@@ -69,5 +78,18 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
         }
+    }
+
+    GroupBox {
+        id: groupBox_editCondition
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+        anchors.left: groupBox_conditions.right
+        anchors.leftMargin: 5
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 5
+        anchors.top: parent.top
+        anchors.topMargin: 5
+        title: qsTr("Edit Condition")
     }
 }

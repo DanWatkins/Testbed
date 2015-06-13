@@ -26,13 +26,17 @@ MenuBar {
         MenuItem {
             text: "Delete"
         }
+
+        Loader {
+            id: loader_editRuleConditionsDialog
+        }
+
         MenuItem {
-            text: "Edit conditions..."
+            text: "Edit rule conditions..."
 
             onTriggered: {
-                var cmp = Qt.createComponent("EditRuleConditionsDialog.qml")
-                var dialog = cmp.createObject(root)
-                dialog.open()
+                loader_editRuleConditionsDialog.source = ""
+                loader_editRuleConditionsDialog.source = "EditRuleConditionsDialog.qml"
             }
         }
     }

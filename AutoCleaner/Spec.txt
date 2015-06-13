@@ -5,11 +5,6 @@ AutoCleaner - A utility for continually deleting certain files in a directory tr
  * Initial plan
  */
 
-- User enters a fully-persistent list of regular expression strings which indicate patterns of filenames that should be deleted. Filenames compared against regular expressions are allways full names without any directory components (e.g. MyFile.txt).
-
-- User enters 
-
-
 - User may edit the following fully-persistent settings
 	a) List of rules for determining if a file in the directory tree needs to be deleted. Each rule consists of the following properties:
 		i) Max time since creation
@@ -17,7 +12,7 @@ AutoCleaner - A utility for continually deleting certain files in a directory tr
 		iv) Max file size in bytes
 		iii) Filname matching regular expression
 		
-	b) 
+	b) Sleep time in hours
 
 - User presses start button to initiate the continuous cleaning process. The .
 
