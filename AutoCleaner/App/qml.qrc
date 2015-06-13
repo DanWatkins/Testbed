@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>main.qml</file>
-        <file>MainMenuBar.qml</file>
-        <file>DeletionRulesTableView.qml</file>
-        <file>RuleConditionsTableView.qml</file>
-    </qresource>
-</RCC>
