@@ -32,7 +32,7 @@ MenuBar {
         }
 
         MenuItem {
-            text: "Edit rule conditions..."
+            text: "Edit conditions..."
 
             onTriggered: {
                 loader_editRuleConditionsDialog.source = ""

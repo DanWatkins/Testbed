@@ -26,6 +26,8 @@ ApplicationWindow {
 
         title: qsTr("Deletion Rules")
 
-        DeletionRulesTableView { }
+        DeletionRulesTableView {
+            id: deletionRulesTableView
+        }
     }
 }

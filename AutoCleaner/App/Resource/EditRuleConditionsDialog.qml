@@ -8,9 +8,8 @@ Window {
     width: 450
     height: 300
     title: "Edit rule conditions"
-
-    minimumWidth: editRuleConditons.Layout.minimumWidth
-    minimumHeight: editRuleConditons.Layout.minimumHeight
+    modality: Qt.ApplicationModal
+    flags: Qt.Dialog
 
     EditRuleConditions {
         id: editRuleConditons

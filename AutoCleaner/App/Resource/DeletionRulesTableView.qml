@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2
 
 TableView {
+    id: tableView
+
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 30
     anchors.right: parent.right
@@ -33,28 +35,88 @@ TableView {
         role: "recursive"
         title: "Recursive"
         width: 80
-
-        delegate: CheckBox {
-        }
     }
 
     TableViewColumn {
         role: "cleanFrequency"
         title: "Clean Frequency (hours)"
-
-        delegate: SpinBox {
-            stepSize: 0.1
-            minimumValue: 0.0001
-            maximumValue: 10000
-        }
+        width: 120
     }
 
 
     model: ListModel {
         ListElement {
             path: "C:/Users/Dan/Desktop/"
-            recursive: false
+            recursive: "Yes"
             cleanFrequency: 10.5
+        }
+
+        ListElement {
+            path: "C:/Program Files/"
+            recursive: "Yes"
+            cleanFrequency: 1.5
+        }
+
+        ListElement {
+            path: "C:/Qt/"
+            recursive: "No"
+            cleanFrequency: 10.5
+        }
+
+        ListElement {
+            path: "C:/Qt/bin"
+            recursive: "Yes"
+            cleanFrequency: 10.5
+        }
+
+        ListElement {
+            path: "C:/Fraps/"
+            recursive: "No"
+            cleanFrequency: 10.5
+        }
+    }
+
+    Menu {
+        id: contextMenu
+        MenuItem {
+            text: qsTr("Start")
+        }
+        MenuItem {
+            text: qsTr("Stop")
+        }
+        MenuItem {
+            text: qsTr("Force run")
+        }
+
+        MenuSeparator { }
+
+        MenuItem {
+            text: qsTr("Delete")
+        }
+        MenuItem {
+            text: qsTr("Edit conditions...")
+        }
+    }
+
+    rowDelegate: Item {
+        Rectangle {
+            anchors {
+                left: parent.left
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+            }
+            height: parent.height
+            color: styleData.selected ? 'lightblue' : 'white'
+
+            RightClickArea {
+                anchors.fill: parent
+
+                onRightClick: {
+                    tableView.selection.deselect(0, tableView.rowCount-1)
+                    tableView.selection.select(styleData.row)
+                    contextMenu.popup()
+                }
+            }
         }
     }
 }
