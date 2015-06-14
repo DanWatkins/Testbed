@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>DeletionRulesTableView.qml</file>
-        <file>EditRuleConditions.qml</file>
-        <file>EditRuleConditionsDialog.qml</file>
+        <file>RulesTableView.qml</file>
+        <file>RuleDetails.qml</file>
         <file>main.qml</file>
         <file>MainMenuBar.qml</file>
         <file>RightClickArea.qml</file>
+        <file>RuleConditions.qml</file>
     </qresource>
 </RCC>

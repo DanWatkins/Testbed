@@ -11,7 +11,8 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG  += c++14
 
-SOURCES +=
+SOURCES += \
+    AutoCleaner.cpp
 
 HEADERS += \
     AutoCleaner.h

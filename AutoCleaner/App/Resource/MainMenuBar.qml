@@ -7,10 +7,13 @@ MenuBar {
     Menu {
         title: "File"
         MenuItem {
-            text: "Import rules"
+            text: "Add Rule"
         }
         MenuItem {
-            text: "Export rules"
+            text: "Import Rules"
+        }
+        MenuItem {
+            text: "Export Rules"
         }
         MenuSeparator { }
         MenuItem {
@@ -19,41 +22,18 @@ MenuBar {
     }
 
     Menu {
-        title: "Rule"
+        title: "Rules"
         MenuItem {
-            text: "New"
+            text: "Start All"
         }
         MenuItem {
-            text: "Delete"
-        }
-
-        Loader {
-            id: loader_editRuleConditionsDialog
-        }
-
-        MenuItem {
-            text: "Edit conditions..."
-
-            onTriggered: {
-                loader_editRuleConditionsDialog.source = ""
-                loader_editRuleConditionsDialog.source = "EditRuleConditionsDialog.qml"
-            }
-        }
-    }
-
-    Menu {
-        title: "Run"
-        MenuItem {
-            text: "Start all"
+            text: "Stop All"
         }
         MenuItem {
-            text: "Stop all"
+            text: "Force Run All"
         }
         MenuItem {
-            text: "Force run all"
-        }
-        MenuItem {
-            text: "Delete all"
+            text: "Delete All"
         }
     }
 }

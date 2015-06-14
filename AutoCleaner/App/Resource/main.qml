@@ -10,24 +10,40 @@ ApplicationWindow {
     height: 600
     visible: true
 
-    minimumWidth: groupBox_deletionRules.Layout.minimumWidth
-    minimumHeight: groupBox_deletionRules.Layout.minimumHeight
-
     menuBar: MainMenuBar { }
 
-    GroupBox {
-        id: groupBox_deletionRules
-        width: 400
+    SplitView {
         anchors.fill: parent
-        anchors.margins: 5
+        orientation: Qt.Vertical
 
-        Layout.minimumWidth: 300
-        Layout.minimumHeight: 300
+        GroupBox {
+            id: groupBox1
+            height: 300
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            title: qsTr("Rules")
 
-        title: qsTr("Deletion Rules")
+            RulesTableView {
+                id: rulesTableView
+                x: 5
+                y: 5
+                anchors.bottomMargin: 0
+            }
+        }
 
-        DeletionRulesTableView {
-            id: deletionRulesTableView
+        RuleDetails {
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 5
+            anchors.top: groupBox1.bottom
+            anchors.topMargin: 5
         }
     }
 }

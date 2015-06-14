@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-06-09T18:30:45
+# Project created by QtCreator 2015-06-13T22:47:47
 #
 #-------------------------------------------------
 
@@ -8,20 +8,18 @@ QT       += testlib
 
 QT       -= gui
 
-TARGET = Test_ThreadsafeArray
+TARGET = tst_teststest
 CONFIG   += console
 CONFIG   -= app_bundle
 CONFIG  += c++14
 
 TEMPLATE = app
 
-
 SOURCES += \
     main.cpp
 
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
-
 HEADERS += \
+    AutoTest.h \
     Test_AutoCleaner.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Src/release/ -lAutoCleaner
